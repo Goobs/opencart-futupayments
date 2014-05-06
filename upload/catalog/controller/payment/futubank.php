@@ -9,7 +9,7 @@ class ControllerPaymentFutubank extends Controller {
 			'futubank_url'   => $this->get_futubank_url(),
 			'futubank_form'  => $this->get_futubank_form(),
 		));
-		$this->template = $this->get_template()
+		$this->template = $this->get_template();
 		$this->render();
 	}
 
@@ -79,29 +79,33 @@ class ControllerPaymentFutubank extends Controller {
 	}
 
 	public function fail() {
-		$this->redirect( HTTPS_SERVER . 'index.php?route=checkout/checkout');
+		$this->redirect(HTTPS_SERVER . 'index.php?route=checkout/checkout');
 	}
 
 	public function callback() {
-
 		$signature = $this->get_signature($this->request->post);
-		if ($signature != $this->request->post['signature']) {
-			echo 'ERROR: wrong signature';
+		if (!$this->request->post) {
+			echo "ERROR: empty request\n";
+		} else if ($signature !== $this->request->post['signature']) {
+			echo "ERROR: wrong signature\n";
+			#var_dump($this->request->post);
 		} else {
-			$this->load->model('checkout/order');
-			
-			$order_id = $this->request->post['order_id'];
-			$order_info = $this->model_checkout_order->getOrder($order_id);
+			if ($this->request->post['state'] == 'COMPLETE') {
+				
+				$this->load->model('checkout/order');
+				
+				$order_id = $this->request->post['order_id'];
+				$order_info = $this->model_checkout_order->getOrder($order_id);
 
-			$new_order_status_id = $this->config->get('futubank_order_status_id');
-			$current_order_status_id = $order_info['order_status_id'];
+				$new_order_status_id = $this->config->get('futubank_order_status_id');
+				$current_order_status_id = $order_info['order_status_id'];
 
-			if (!$current_order_status_id) {
-				$this->model_checkout_order->confirm($order_id, $new_order_status_id, 'futubank');				
-			} else if ($current_order_status_id != $new_order_status_id) {
-				$this->model_checkout_order->update($order_id, $new_order_status_id, 'futubank', TRUE);
+				if (!$current_order_status_id) {
+					$this->model_checkout_order->confirm($order_id, $new_order_status_id, 'futubank');				
+				} else if ($current_order_status_id != $new_order_status_id) {
+					$this->model_checkout_order->update($order_id, $new_order_status_id, 'futubank', TRUE);
+				}
 			}
-
 			echo "OK$order_id\n";
 		}
 	}
@@ -115,7 +119,7 @@ class ControllerPaymentFutubank extends Controller {
 	            $chunks[] = $k . '=' . base64_encode($params[$k]);
 	        }
 	    }
-	    $secret_key = $this->config->get('futubank_merchant_id');
+	    $secret_key = $this->config->get('futubank_secret_key');
 	    return self::double_sha1($secret_key, implode('&', $chunks));
 	}
 

@@ -31,8 +31,10 @@ class ControllerPaymentFutubank extends Controller {
             # secret_key
             'entry_secret_key'      => $this->language->get('entry_secret_key'),
             'error_secret_key'      => isset($this->error['secret_key']) ? $this->error['secret_key'] : '',
+            'error_warning'         => isset($this->error['warning']) ? $this->error['warning'] : '',
 
             # urls
+            'entry_callback_url'    => $this->language->get('entry_callback_url'),
             'callback_url'          => HTTP_CATALOG . 'index.php?route=payment/futubank/callback',
             'success_url'           => HTTP_CATALOG . 'index.php?route=payment/futubank/success',
             'fail_url'              => HTTP_CATALOG . 'index.php?route=payment/futubank/fail',
@@ -65,6 +67,7 @@ class ControllerPaymentFutubank extends Controller {
             
             'button_save'           => $this->language->get('button_save'),
             'button_cancel'         => $this->language->get('button_cancel'),
+            'futubank_downloads'    => $this->language->get('futubank_downloads'),
 
             'action'                => $this->url->link('payment/futubank', 'token=' . $this->session->data['token'], 'SSL'),
             'cancel'                => $this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL'),
@@ -118,10 +121,10 @@ class ControllerPaymentFutubank extends Controller {
         if (!$this->user->hasPermission('modify', 'payment/futubank')) {
             $this->error['warning'] = $this->language->get('error_permission');
         }
-        if (!$this->request->post['secret_key']) {
+        if (!$this->request->post['futubank_secret_key']) {
             $this->error['secret_key'] = $this->language->get('error_secret_key');
         }
-        if (!$this->request->post['merchant_id']) {
+        if (!$this->request->post['futubank_merchant_id']) {
             $this->error['merchant_id'] = $this->language->get('error_merchant_id');
         }
         return $this->error ? FALSE : TRUE;

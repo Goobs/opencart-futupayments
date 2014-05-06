@@ -44,7 +44,7 @@
             </td>
         </tr>
       	<tr>
-       		  <td>callback_url:</td>
+       		  <td><?php echo $entry_callback_url; ?></td>
             <td><?php echo $callback_url; ?></td>
       	</tr>
       	<tr>
@@ -111,7 +111,7 @@
         <tr>
             <td></td>
             <td>
-                <a href="https://github.com/Futubank/opencart-futupayments">Свежие версии этого модуля на Github</a>
+                <a href="https://github.com/Futubank/opencart-futupayments"><?php echo $futubank_downloads; ?></a>
             </td>
         </tr>
       </table>
