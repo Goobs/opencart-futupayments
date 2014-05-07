@@ -4,7 +4,6 @@
 			<input name="<?php echo htmlspecialchars($k); ?>" value="<?php echo htmlspecialchars($v); ?>" type="hidden">	
 		<?php } ?>
 		<div class="right">
-			time()=<?= time() ?>=
 	    	<input type="submit" class="button" value="<?php echo htmlspecialchars($button_confirm); ?>">
 	 	</div>
  	</form>
