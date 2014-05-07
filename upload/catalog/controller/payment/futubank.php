@@ -32,14 +32,15 @@ class ControllerPaymentFutubank extends Controller {
 		
 		$form = array(
 			'merchant' 		=> $this->config->get('futubank_merchant_id'),
-			'timestamp' 	=> time(),
+			#'timestamp' 	=> time(),
+			'timestamp' 	=> '20140507112640',
 			'salt'   		=> '00000000000000000000000000000000',
 			'amount'    	=> $amount,
 			'currency'  	=> $currency,
 			'description' 	=> "Заказ №$order_id",
 			'order_id' 		=> $order_id,
-			'success_url' 	=> HTTP_CATALOG . 'index.php?route=payment/futubank/success',
-			'fail_url'  	=> HTTP_CATALOG . 'index.php?route=payment/futubank/fail',
+			'success_url' 	=> HTTPS_SERVER . 'index.php?route=payment/futubank/success',
+			'fail_url'  	=> HTTPS_SERVER . 'index.php?route=payment/futubank/fail',
 			'cancel_url'    => $this->get_back_url(),
 			'meta'			=> '',
 		);

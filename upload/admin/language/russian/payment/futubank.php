@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title'] = 'Futubank';
+$_['heading_title'] = 'Оплата через Futubank.com';
 $_['text_payment'] = 'Оплата';
 $_['entry_secret_key'] = 'Секретный ключ (secret_key) магазина';
 $_['error_secret_key'] = 'Укажите секретный ключ магазина';

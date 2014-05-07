@@ -5,7 +5,7 @@ class ControllerPaymentFutubank extends Controller {
 
     public function index() {
         $this->load->language('payment/futubank');
-        $this->document->setTitle = $this->language->get('heading_title');
+        $this->document->setTitle($this->language->get('heading_title'));
         
         $this->load->model('setting/setting');
         $this->load->model('localisation/order_status');
