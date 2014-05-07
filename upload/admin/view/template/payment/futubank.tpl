@@ -21,7 +21,7 @@
   <div class="content">
       <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" id="form">
       <table class="form">
-      	<tr>
+        <tr>
             <td width="25%">
                 <span class="required">*</span> <?php echo $entry_merchant_id; ?>
             </td>
@@ -31,7 +31,7 @@
                     <span class="error"><?php echo $error_merchant_id; ?></span>
                 <?php } ?>
             </td>
-      	</tr>
+        </tr>
         <tr>
             <td width="25%">
                 <span class="required">*</span> <?php echo $entry_secret_key; ?>
@@ -43,18 +43,18 @@
                 <?php } ?>
             </td>
         </tr>
-      	<tr>
-       		  <td><?php echo $entry_callback_url; ?></td>
+        <tr>
+              <td><?php echo $entry_callback_url; ?></td>
             <td><?php echo $callback_url; ?></td>
-      	</tr>
-      	<tr>
+        </tr>
+        <tr>
             <td>success_url:</td>
             <td><?php echo $success_url; ?></td>
-      	</tr>
-      	<tr>
-      	    <td>fail_url:</td>
+        </tr>
+        <tr>
+            <td>fail_url:</td>
             <td><?php echo $fail_url; ?></td>
-      	</tr>
+        </tr>
         <tr>
             <td>
                 <?php echo $entry_mode; ?>
@@ -66,7 +66,7 @@
                 </select>
             </td>
         </tr>
-      	<tr>
+        <tr>
             <td><?php echo $entry_order_status; ?></td>
             <td>
                 <select name="futubank_order_status_id">
@@ -78,8 +78,8 @@
                   <?php } ?>
               </select>
             </td>
-      	</tr>
-      	<tr>
+        </tr>
+        <tr>
         <td><?php echo $entry_geo_zone; ?></td>
             <td>
                 <select name="futubank_geo_zone_id">
@@ -92,8 +92,8 @@
                     <?php } ?>
                 </select>
             </td>
-      	</tr>
-      	<tr>
+        </tr>
+        <tr>
             <td>
                 <?php echo $entry_status; ?>
             </td>
@@ -103,8 +103,8 @@
                     <option value="0"<?php if (!$futubank_status) { ?> selected="selected"<?php } ?>><?php echo $text_disabled; ?></option>
                 </select>
             </td>
-      	</tr>
-      	<tr>
+        </tr>
+        <tr>
             <td><?php echo $entry_sort_order; ?></td>
             <td><input type="text" name="futubank_sort_order" value="<?php echo $futubank_sort_order; ?>" size="1" /></td>
         </tr>
