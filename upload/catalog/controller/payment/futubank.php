@@ -33,7 +33,7 @@
             $form = array(
                 'merchant'       => $this->config->get('futubank_merchant_id'),
                 'unix_timestamp' => time(),
-                'salt'           => '00000000000000000000000000000000',
+                'salt'           => $this->get_salt(32),
                 'amount'         => $amount,
                 'currency'       => $currency,
                 'description'    => "Заказ №$order_id",
@@ -47,6 +47,15 @@
             $form['signature'] = $this->get_signature($form);
 
             return $form;
+        }
+
+        private function get_salt($length = 10) {
+            $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            $result = '';
+            for ($i = 0; $i < $length; $i++) {
+                $result .= $characters[rand(0, strlen($characters) - 1)];
+            }
+            return $result;
         }
 
         private function get_futubank_url() {
