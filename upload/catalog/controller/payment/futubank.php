@@ -21,14 +21,6 @@
             
             $order_info = $this->model_checkout_order->getOrder($order_id); 
             $amount = $this->currency->convert($order_info['total'], $order_info['currency_code'], $currency);
-            $order_description = implode(' ', array(
-                $this->config->get('config_store'),
-                $order_info['payment_firstname'],
-                $order_info['payment_address_1'],
-                $order_info['payment_address_2'],
-                $order_info['payment_city'],
-                $order_info['email'],
-            ));
             
             $form = array(
                 'merchant'       => $this->config->get('futubank_merchant_id'),
@@ -38,12 +30,15 @@
                 'currency'       => $currency,
                 'description'    => "Заказ №$order_id",
                 'order_id'       => $order_id,
+                'client_email'   => $order_info['email'],
+                'client_name'    => $order_info['payment_firstname'] . ' ' . $order_info['payment_lastname'],
+                'client_phone'   => $order_info['telephone'],
                 'success_url'    => HTTPS_SERVER . 'index.php?route=payment/futubank/success',
                 'fail_url'       => HTTPS_SERVER . 'index.php?route=payment/futubank/fail',
                 'cancel_url'     => $this->get_back_url(),
                 'meta'           => '',
             );
-            
+
             $form['signature'] = $this->get_signature($form);
 
             return $form;
