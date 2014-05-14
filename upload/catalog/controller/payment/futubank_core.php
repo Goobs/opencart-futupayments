@@ -1,5 +1,32 @@
 <?php
 
+/**
+ * Вывод формы оплаты:
+ *
+ * $ff = new FutubankForm($merchant_id, $secret_key, $is_test);
+ *
+ * // URL для отправки формы:
+ * $url = $ff->get_url()
+ *
+ * // значения полей формы
+ * $form = compose(
+ *     $amount,        // сумма заказа
+ *     $currency,      // валюта заказа (поддерживается только "RUB")
+ *     $order_id,      // номер заказа
+ *     $client_email,  // e-mail клиента (может быть '')
+ *     $client_name,   // имя клиента (может быть '')
+ *     $client_phone,  // телефон клиента (может быть '')
+ *     $success_url,   // URL, куда направить клиента при успешной оплате
+ *     $fail_url,      // URL, куда направить клиента при ошибке
+ *     $cancel_url     // URL текущей страницы
+ * );
+ *
+ * // далее можно самостоятельно вывести $form в виде hidden-полей,
+ * // а можно воспользоваться готовым статическим методом array_to_hidden_fields:
+ *
+ * echo "<form action='$url' method='post'>" . FutubankForm::array_to_hidden_fields($form) . '<input type="submit"></form>';
+ *
+ */
 class FutubankForm {
     private $merchant_id;
     private $secret_key;
@@ -11,7 +38,7 @@ class FutubankForm {
         $this->is_test = $is_test;
     }
 
-    public function get_url($mode) {
+    public function get_url() {
         if ($this->is_test) {
             return 'https://secure.futubank.com/pay/';
         } else {
