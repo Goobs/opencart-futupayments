@@ -9,7 +9,7 @@ class ControllerPaymentFutubank extends Controller {
         $this->data = array_merge($this->data, array(
             'button_confirm'  => $this->language->get('button_confirm'),
             'button_back'     => $this->language->get('button_back'),
-            'futubank_url'    => $this->get_futubank_url(),
+            'futubank_url'    => FutubankForm::get_url($this->config->get('futubank_mode')),
             'futubank_fields' => FutubankForm::array_to_hidden_fields($this->get_futubank_form()),
         ));
         $this->template = $this->get_template();
@@ -50,14 +50,6 @@ class ControllerPaymentFutubank extends Controller {
         );
     }
 
-    private function get_futubank_url() {
-        if ($this->config->get('futubank_mode') == 'real') {
-            return 'https://secure.futubank.com/pay/';
-        } else {
-            return 'https://secure.futubank.com/testing-pay/';
-        }
-    }
-
     private function get_back_url() {
         if ($this->request->get['route'] != 'checkout/guest_step_3') {
             return HTTPS_SERVER . 'index.php?route=checkout/checkout';
@@ -71,7 +63,7 @@ class ControllerPaymentFutubank extends Controller {
         if (file_exists(DIR_TEMPLATE . $custom_template)) {
             return $custom_template;
         } else {
-            return 'default/template/payment/futubank.tpl';     
+            return 'default/template/payment/futubank.tpl';
         }
     }
 
@@ -85,7 +77,7 @@ class ControllerPaymentFutubank extends Controller {
 
     public function callback() {
         $signature = $this->get_form_object()->get_signature($this->request->post);
-        
+
         if (!$this->request->post) {
             echo "ERROR: empty request\n";
         } else if ($signature !== $this->request->post['signature']) {

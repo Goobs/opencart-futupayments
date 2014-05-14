@@ -49,6 +49,16 @@ class FutubankForm {
         return $result;
     }
 
+    public static function get_url($mode) {
+        if ($mode == 'real') {
+            return 'https://secure.futubank.com/pay/';
+        } else if ($mode == 'test') {
+            return 'https://secure.futubank.com/testing-pay/';
+        } else {
+            throw new Exception('mode must be "test" or "real"');
+        }
+    }
+
     public function get_signature(array $params) {
         $keys = array_keys($params);
         sort($keys);
