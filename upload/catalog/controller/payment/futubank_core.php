@@ -3,10 +3,20 @@
 class FutubankForm {
     private $merchant_id;
     private $secret_key;
+    private $is_test;
 
-    public function __construct($merchant_id, $secret_key) {
+    public function __construct($merchant_id, $secret_key, $is_test) {
         $this->merchant_id = $merchant_id;
         $this->secret_key = $secret_key;
+        $this->is_test = $is_test;
+    }
+
+    public function get_url($mode) {
+        if ($this->is_test) {
+            return 'https://secure.futubank.com/pay/';
+        } else {
+            return 'https://secure.futubank.com/testing-pay/';
+        }
     }
 
     public function compose(
@@ -41,6 +51,18 @@ class FutubankForm {
         return $form;
     }
 
+    public function is_signature_correct(array $form) {
+        if (!array_key_exists('signature', $form)) {
+            return false;
+        }
+        return $this->get_signature($form) == $form['signature'];
+    }
+
+    public function is_order_completed(array $form) {
+        $is_testing_transaction = ($form->post['testing'] === '1');
+        return ($form['state'] == 'COMPLETE') && ($is_testing_transaction == $this->is_test);
+    }
+
     public static function array_to_hidden_fields(array $form) {
         $result = '';
         foreach ($form as $k => $v) {
@@ -49,17 +71,7 @@ class FutubankForm {
         return $result;
     }
 
-    public static function get_url($mode) {
-        if ($mode == 'real') {
-            return 'https://secure.futubank.com/pay/';
-        } else if ($mode == 'test') {
-            return 'https://secure.futubank.com/testing-pay/';
-        } else {
-            throw new Exception('mode must be "test" or "real"');
-        }
-    }
-
-    public function get_signature(array $params) {
+    private function get_signature(array $params) {
         $keys = array_keys($params);
         sort($keys);
         $chunks = array();
