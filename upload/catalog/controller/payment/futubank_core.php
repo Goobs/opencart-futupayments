@@ -31,7 +31,7 @@ class FutubankForm {
     private $merchant_id;
     private $secret_key;
     private $is_test;
-    
+
     const HOST = 'https://secure.futubank.com';
 
     public function __construct($merchant_id, $secret_key, $is_test) {
@@ -88,7 +88,7 @@ class FutubankForm {
     }
 
     public function is_order_completed(array $form) {
-        $is_testing_transaction = ($form->post['testing'] === '1');
+        $is_testing_transaction = ($form['testing'] === '1');
         return ($form['state'] == 'COMPLETE') && ($is_testing_transaction == $this->is_test);
     }
 
@@ -114,7 +114,7 @@ class FutubankForm {
 
     private function double_sha1($data) {
         for ($i = 0; $i < 2; $i++) {
-            $data = sha1($this->secret_key . $data);   
+            $data = sha1($this->secret_key . $data);
         }
         return $data;
     }
