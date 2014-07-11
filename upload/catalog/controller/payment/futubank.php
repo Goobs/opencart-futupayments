@@ -1,5 +1,13 @@
 <?php
 
+/**
+ *
+ *  Futubank OpenCart payment plugin v1.0
+ *
+ */ 
+
+define('FUTUBANK_VERSION', '1.0');
+
 include('futubank_core.php');
 
 class ControllerPaymentFutubank extends Controller {
@@ -30,7 +38,6 @@ class ControllerPaymentFutubank extends Controller {
             echo "ERROR: empty request\n";
         } else if (!$ff->is_signature_correct($this->request->post)) {
             echo "ERROR: wrong signature\n";
-            #var_dump($this->request->post);
         } else {
             $this->load->model('checkout/order');
             $order_id = $this->request->post['order_id'];
@@ -52,10 +59,15 @@ class ControllerPaymentFutubank extends Controller {
     }
 
     private function get_form_object() { 
+        $version = defined('VERSION')?VERSION:'Unknown';
+        $plugin_version = defined('FUTUBANK_VERSION')?FUTUBANK_VERSION:'Unknown';
+        $cms_info = 'OpenCart v. ' . $version;
         return new FutubankForm(
             $this->config->get('futubank_merchant_id'),
             $this->config->get('futubank_secret_key'),
-            $this->config->get('futubank_mode') == 'test'
+            $this->config->get('futubank_mode') == 'test',
+            $plugin_version,
+            $cms_info
         );
     }
 
@@ -66,8 +78,9 @@ class ControllerPaymentFutubank extends Controller {
         $order_id = $this->session->data['order_id'];
 
         $order_info = $this->model_checkout_order->getOrder($order_id);
-        $amount = $this->currency->convert($order_info['total'], $order_info['currency_code'], $currency);
 
+        $amount = $this->currency->format($order_info['total'], $currency, $order_info['currency_value'], false);
+        
         return $this->get_form_object()->compose(
             $amount,
             $currency,
